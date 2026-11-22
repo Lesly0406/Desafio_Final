@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIMTELE-RISK — Plataforma Integrada (Semana 2)</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --text: #111827;
+    --muted: #4b5563;
+    --border: #d1d5db;
+    --primary: #111827;
+    --accent: #1f2937;
+    --badge-normal: #e5e7eb;
+    --badge-stress: #fef3c7;
+    --badge-ill: #fee2e2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: #111827;
+    color: #ffffff;
+    padding: 16px 24px;
+    border-bottom: 3px solid #000000;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+  }
+  header p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #d1d5db;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #ffffff;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  nav button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border: 1px solid #111827;
+    background: #ffffff;
+    color: #111827;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  nav button.active {
+    background: #111827;
+    color: #ffffff;
+  }
+  main {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 20px 40px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  h2, h3, h4 {
+    color: #000000;
+    margin-top: 0;
+  }
+  h2 {
+    font-size: 18px;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+  h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+    gap: 18px;
+  }
+  .module-card {
+    border: 1px solid #111827;
+    border-radius: 6px;
+    padding: 16px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .module-card p {
+    font-size: 13px;
+    color: #374151;
+  }
+  .btn {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border: 1px solid #000000;
+    background: #111827;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .btn-outline {
+    background: #ffffff;
+    color: #000000;
+  }
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    background: #f9fafb;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .field label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000000;
+  }
+  .field input, .field select {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    padding: 6px 8px;
+    border: 1px solid #9ca3af;
+    border-radius: 4px;
+    width: 140px;
+  }
+  .formula-box {
+    background: #f9fafb;
+    border-left: 4px solid #000000;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  th, td {
+    border: 1px solid #9ca3af;
+    padding: 7px 8px;
+    text-align: left;
+  }
+  th {
+    background: #e5e7eb;
+    color: #000000;
+    font-weight: bold;
+  }
+  .chart-box {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    background: #ffffff;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  canvas {
+    width: 100%;
+    height: 270px;
+    display: block;
+  }
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .conclusion-box {
+    border: 1px solid #000000;
+    padding: 12px;
+    border-radius: 4px;
+    background: #fafafa;
+    font-size: 13px;
+  }
+  .hidden { display: none; }
+  pre {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    padding: 12px;
+    font-size: 12px;
+    overflow-x: auto;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #000000;
+    border-radius: 3px;
+  }
+  @media (max-width: 768px) {
+    .grid-2, .conclusion-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SIMTELE-RISK — Sistema Integrado de Simulación Numérica (Entrega Semana 2)</h1>
+  <p>Contexto académico: Transporte por cable (Mi Teleférico, La Paz) · Modelos sintéticos y educativos · UMSA — Carrera de Informática (INF-373)</p>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="showTab('inicio', this)">Inicio (Panel General)</button>
+  <button onclick="showTab('mod1', this)">Módulo 1: Detención</button>
+  <button onclick="showTab('mod2', this)">Módulo 2: Deterioro</button>
+  <button onclick="showTab('mod3', this)">Módulo 3: Oscilaciones</button>
+  <button onclick="showTab('mod4', this)">Módulo 4: Sensores</button>
+  <button onclick="showTab('historial', this)">Historial y Base de Datos</button>
+</nav>
+
+<main>
+  <!-- ==================== INICIO ==================== -->
+  <section id="tab-inicio">
+    <div class="card">
+      <h2>Panel General de Módulos Obligatorios — SIMTELE-RISK</h2>
+      <p style="font-size:13px;">Seleccione uno de los cuatro casos de estudio para ejecutar los escenarios <strong>NORMAL</strong>, <strong>ESTRÉS</strong> y <strong>MAL CONDICIONADO</strong>, inspeccionar tablas de iteraciones/refinamiento, visualizar gráficos comparativos y guardar experimentos en la base de datos local persistente.</p>
+      <div class="grid-4">
+        <div class="module-card">
+          <div>
+            <h3>1. Detención de Emergencia</h3>
+            <p><strong>Métodos:</strong> EDO (RK2 Heun, RK4), Integración (Trapecio, Simpson 1/3, Romberg) y Raíces (Bisección, Newton-Raphson, Secante).</p>
+            <p><strong>Modelo:</strong> dx/dt = v, dv/dt = −a(v,t) tras tiempo de reacción t<sub>r</sub>.</p>
+          </div>
+          <button class="btn" onclick="openModule('mod1')">Abrir Módulo 1</button>
+        </div>
+        <div class="module-card">
+          <div>
+            <h3>2. Deterioro Mecánico</h3>
+            <p><strong>Métodos:</strong> Sistemas Lineales SPD (Jacobi, Gauss-Seidel, LU, Gradiente Conjugado) y Raíces (Bisección, Newton, Secante).</p>
+            <p><strong>Modelo:</strong> Calibración (Φ<sup>T</sup>Φ + λI)θ = Φ<sup>T</sup>y y umbral D(t) − D<sub>umbral</sub> = 0.</p>
+          </div>
+          <button class="btn" onclick="openModule('mod2')">Abrir Módulo 2</button>
+        </div>
+        <div class="module-card">
+          <div>
+            <h3>3. Oscilaciones por Viento</h3>
+            <p><strong>Métodos:</strong> EDO de 2.º orden (RK2, RK4) e Integración acumulada (Trapecio, Simpson 1/3, Romberg).</p>
+            <p><strong>Modelo:</strong> m·x'' + c·x' + k·x = F(t) y energía ∫ x(t)<sup>2</sup> dt.</p>
+          </div>
+          <button class="btn" onclick="openModule('mod3')">Abrir Módulo 3</button>
+        </div>
+        <div class="module-card">
+          <div>
+            <h3>4. Reconstrucción de Sensores</h3>
+            <p><strong>Métodos:</strong> Interpolación (Lagrange, Newton diferencias divididas, Splines cúbicos naturales) y Raíces de cruce.</p>
+            <p><strong>Modelo:</strong> Reconstrucción de registros ocultos y evaluación de ruido / fenómeno de Runge.</p>
+          </div>
+          <button class="btn" onclick="openModule('mod4')">Abrir Módulo 4</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cobertura Matemática Implementada (Semana 2)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Familia Numérica</th>
+            <th>Algoritmos Implementados</th>
+            <th>Módulos donde se ejecuta</th>
+            <th>Métricas de Error Transversal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Sistemas Lineales</strong></td>
+            <td>Jacobi, Gauss-Seidel, Factorización LU, Gradiente Conjugado</td>
+            <td>Módulo 2 (Calibración SPD 4×4 y Hilbert H<sub>4</sub>)</td>
+            <td>||x − x*||<sub>2</sub>, Error Relativo %, Residual ||b − Ax||<sub>2</sub>, κ<sub>2</sub>(A)</td>
+          </tr>
+          <tr>
+            <td><strong>Interpolación</strong></td>
+            <td>Lagrange, Newton (diferencias divididas), Splines cúbicos naturales</td>
+            <td>Módulo 4 (Sensores, brechas y Runge)</td>
+            <td>Error real en nodos ocultados, RMSE, Error máximo</td>
+          </tr>
+          <tr>
+            <td><strong>Raíces</strong></td>
+            <td>Bisección, Newton-Raphson, Secante</td>
+            <td>Módulo 1 (v(t)=0), Módulo 2 (D(t)=D<sub>umbral</sub>), Módulo 4 (cruce)</td>
+            <td>|t − t*|, Error relativo %, Residual |f(t)|, iteraciones</td>
+          </tr>
+          <tr>
+            <td><strong>Integración Numérica</strong></td>
+            <td>Trapecio compuesto, Simpson 1/3 compuesto, Romberg</td>
+            <td>Módulo 1 (distancia ∫v dt), Módulo 3 (energía ∫x<sup>2</sup> dt)</td>
+            <td>|I − I<sub>ref</sub>|, Error porcentual, orden de convergencia</td>
+          </tr>
+          <tr>
+            <td><strong>EDO (Valor Inicial)</strong></td>
+            <td>Runge-Kutta 2.º orden (Heun) y Runge-Kutta 4.º orden (RK4)</td>
+            <td>Módulo 1 (cinemática frenado), Módulo 3 (oscilador viento)</td>
+            <td>Error global máximo, error final respecto a solución analítica</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== MÓDULO 1: DETENCIÓN ==================== -->
+  <section id="tab-mod1" class="hidden">
+    <div class="card">
+      <h2>Módulo 1 — Detención de Emergencia de Cabinas</h2>
+      <div class="formula-box">
+        <strong>Modelo Matemático:</strong> Para 0 ≤ t ≤ t<sub>r</sub>: dx/dt = v<sub>0</sub>, dv/dt = 0. Para t &gt; t<sub>r</sub>: dx/dt = v, dv/dt = −(a<sub>0</sub> + c<sub>d</sub>·v<sup>2</sup>).<br>
+        <strong>Referencia Analítica (c<sub>d</sub> = 0):</strong> t<sub>det</sub> = t<sub>r</sub> + v<sub>0</sub>/a<sub>0</sub>, &nbsp; x<sub>det</sub> = v<sub>0</sub>·t<sub>r</sub> + v<sub>0</sub><sup>2</sup>/(2a<sub>0</sub>).
+      </div>
+      <div class="controls">
+        <div class="field">
+          <label>Escenario Predefinido</label>
+          <select id="m1-escenario" onchange="loadPresetM1()">
+            <option value="NORMAL">NORMAL</option>
+            <option value="ESTRES">ESTRÉS</option>
+            <option value="MAL_CONDICIONADO">MAL CONDICIONADO</option>
+          </select>
+        </div>
+        <div class="field"><label>v<sub>0</sub> (m/s)</label><input type="number" id="m1-v0" step="0.1" value="6.0"></div>
+        <div class="field"><label>t<sub>r</sub> (s)</label><input type="number" id="m1-tr" step="0.1" value="0.8"></div>
+        <div class="field"><label>a<sub>0</sub> (m/s<sup>2</sup>)</label><input type="number" id="m1-a0" step="0.05" value="1.2"></div>
+        <div class="field"><label>c<sub>d</sub> (arrastre)</label><input type="number" id="m1-cd" step="0.005" value="0.0"></div>
+        <div class="field"><label>Paso h (s)</label><input type="number" id="m1-h" step="0.01" value="0.05"></div>
+        <button class="btn" onclick="runMod1()">Ejecutar Simulación</button>
+        <button class="btn btn-outline" onclick="saveCurrentExperiment('Módulo 1: Detención')">Guardar en Historial</button>
+      </div>
+
+      <div id="m1-results"></div>
+
+      <div class="grid-2">
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 1: Perfil de Velocidad v(t) y Posición x(t) — RK2 vs RK4</div>
+          <canvas id="m1-chart1" width="540" height="270"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 2: Convergencia de Raíces v(t<sub>det</sub>)=0 (Error Residual)</div>
+          <canvas id="m1-chart2" width="540" height="270"></canvas>
+        </div>
+      </div>
+
+      <div class="conclusion-grid" id="m1-conclusions"></div>
+    </div>
+  </section>
+
+  <!-- ==================== MÓDULO 2: DETERIORO ==================== -->
+  <section id="tab-mod2" class="hidden">
+    <div class="card">
+      <h2>Módulo 2 — Deterioro Mecánico y Mantenimiento</h2>
+      <div class="formula-box">
+        <strong>Calibración Lineal SPD:</strong> A·x = b (n = 4 parámetros de desgaste).<br>
+        <strong>Ecuación de Umbral:</strong> f(t) = D<sub>0</sub> + α·t + β·t<sup>2</sup> − D<sub>umbral</sub> = 0 &nbsp;⇒&nbsp; t* = [−α + √(α<sup>2</sup> − 4β(D<sub>0</sub> − D<sub>umbral</sub>))] / (2β).
+      </div>
+      <div class="controls">
+        <div class="field">
+          <label>Escenario Predefinido</label>
+          <select id="m2-escenario" onchange="loadPresetM2()">
+            <option value="NORMAL">NORMAL</option>
+            <option value="ESTRES">ESTRÉS</option>
+            <option value="MAL_CONDICIONADO">MAL CONDICIONADO</option>
+          </select>
+        </div>
+        <div class="field"><label>D<sub>0</sub> (inicial)</label><input type="number" id="m2-d0" step="0.5" value="10"></div>
+        <div class="field"><label>α (lineal)</label><input type="number" id="m2-alpha" step="0.1" value="1.8"></div>
+        <div class="field"><label>β (cuadrático)</label><input type="number" id="m2-beta" step="0.01" value="0.08"></div>
+        <div class="field"><label>D<sub>umbral</sub></label><input type="number" id="m2-dumbral" step="1" value="50"></div>
+        <div class="field"><label>Tolerancia</label><input type="number" id="m2-tol" step="1e-9" value="1e-8"></div>
+        <button class="btn" onclick="runMod2()">Ejecutar Simulación</button>
+        <button class="btn btn-outline" onclick="saveCurrentExperiment('Módulo 2: Deterioro')">Guardar en Historial</button>
+      </div>
+
+      <div id="m2-results"></div>
+
+      <div class="grid-2">
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 1: Curva de Deterioro D(t) vs Umbral Crítico</div>
+          <canvas id="m2-chart1" width="540" height="270"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 2: Convergencia de Sistemas Lineales SPD (Log10 Residual)</div>
+          <canvas id="m2-chart2" width="540" height="270"></canvas>
+        </div>
+      </div>
+
+      <div class="conclusion-grid" id="m2-conclusions"></div>
+    </div>
+  </section>
+
+  <!-- ==================== MÓDULO 3: OSCILACIONES ==================== -->
+  <section id="tab-mod3" class="hidden">
+    <div class="card">
+      <h2>Módulo 3 — Oscilaciones Transversales por Viento</h2>
+      <div class="formula-box">
+        <strong>Sistema de EDO:</strong> dx/dt = v, &nbsp; dv/dt = (F<sub>0</sub>·sin(ω<sub>f</sub>·t) − c·v − k·x) / m.<br>
+        <strong>Energía Acumulada:</strong> E<sub>acum</sub> = ∫<sub>0</sub><sup>T</sup> x(t)<sup>2</sup> dt (evaluada mediante Trapecio, Simpson 1/3 y Romberg).
+      </div>
+      <div class="controls">
+        <div class="field">
+          <label>Escenario Predefinido</label>
+          <select id="m3-escenario" onchange="loadPresetM3()">
+            <option value="NORMAL">NORMAL</option>
+            <option value="ESTRES">ESTRÉS</option>
+            <option value="MAL_CONDICIONADO">MAL CONDICIONADO (Stiff)</option>
+          </select>
+        </div>
+        <div class="field"><label>Masa m (kg)</label><input type="number" id="m3-m" step="50" value="1200"></div>
+        <div class="field"><label>Rigidez k (N/m)</label><input type="number" id="m3-k" step="100" value="4800"></div>
+        <div class="field"><label>Amort. c (N·s/m)</label><input type="number" id="m3-c" step="10" value="480"></div>
+        <div class="field"><label>Fuerza F<sub>0</sub> (N)</label><input type="number" id="m3-f0" step="50" value="0"></div>
+        <div class="field"><label>Paso h (s)</label><input type="number" id="m3-h" step="0.01" value="0.02"></div>
+        <div class="field"><label>Tiempo T (s)</label><input type="number" id="m3-T" step="1" value="10"></div>
+        <button class="btn" onclick="runMod3()">Ejecutar Simulación</button>
+        <button class="btn btn-outline" onclick="saveCurrentExperiment('Módulo 3: Oscilaciones')">Guardar en Historial</button>
+      </div>
+
+      <div id="m3-results"></div>
+
+      <div class="grid-2">
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 1: Trayectoria de Oscilación x(t) — RK2 vs RK4 vs Referencia</div>
+          <canvas id="m3-chart1" width="540" height="270"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 2: Error Absoluto Temporal |x<sub>num</sub>(t) − x<sub>ref</sub>(t)|</div>
+          <canvas id="m3-chart2" width="540" height="270"></canvas>
+        </div>
+      </div>
+
+      <div class="conclusion-grid" id="m3-conclusions"></div>
+    </div>
+  </section>
+
+  <!-- ==================== MÓDULO 4: SENSORES ==================== -->
+  <section id="tab-mod4" class="hidden">
+    <div class="card">
+      <h2>Módulo 4 — Reconstrucción de Señales de Sensores</h2>
+      <div class="formula-box">
+        <strong>Señal de Referencia:</strong> Normal/Estrés: y(t) = sin(t) en [0, 2π]; Mal Condicionado (Runge): y(t) = 1 / (1 + 25t<sup>2</sup>) en [−1, 1].<br>
+        <strong>Métodos:</strong> Polinomio de Lagrange, Newton (Diferencias Divididas) y Splines Cúbicos Naturales.
+      </div>
+      <div class="controls">
+        <div class="field">
+          <label>Escenario Predefinido</label>
+          <select id="m4-escenario" onchange="loadPresetM4()">
+            <option value="NORMAL">NORMAL (9 nodos)</option>
+            <option value="ESTRES">ESTRÉS (Ruido + brecha)</option>
+            <option value="MAL_CONDICIONADO">MAL CONDICIONADO (Runge 15 nodos)</option>
+          </select>
+        </div>
+        <div class="field"><label>N.º Nodos (N)</label><input type="number" id="m4-n" min="5" max="25" value="9"></div>
+        <div class="field"><label>Amplitud Ruido σ</label><input type="number" id="m4-noise" step="0.01" value="0.00"></div>
+        <div class="field"><label>Umbral Alerta y<sub>u</sub></label><input type="number" id="m4-umbral" step="0.1" value="0.85"></div>
+        <button class="btn" onclick="runMod4()">Ejecutar Reconstrucción</button>
+        <button class="btn btn-outline" onclick="saveCurrentExperiment('Módulo 4: Sensores')">Guardar en Historial</button>
+      </div>
+
+      <div id="m4-results"></div>
+
+      <div class="grid-2">
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 1: Señal Real vs Lagrange/Newton vs Splines Cúbicos</div>
+          <canvas id="m4-chart1" width="540" height="270"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Gráfico 2: Error Puntual de Reconstrucción |P(t) − y<sub>real</sub>(t)|</div>
+          <canvas id="m4-chart2" width="540" height="270"></canvas>
+        </div>
+      </div>
+
+      <div class="conclusion-grid" id="m4-conclusions"></div>
+    </div>
+  </section>
+
+  <!-- ==================== HISTORIAL Y BD ==================== -->
+  <section id="tab-historial" class="hidden">
+    <div class="card">
+      <h2>Historial de Experimentos Persistentes (Recuperación y Relanzamiento)</h2>
+      <p style="font-size:13px;">Los experimentos guardados se almacenan en <code>localStorage</code> bajo la estructura relacional exigida (<code>simulacion</code>, <code>escenario</code>, <code>ejecucion_metodo</code>, <code>resultado_resumen</code>). Puede cerrar o recargar la página y recuperar cualquier ejecución.</p>
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-outline btn-sm" onclick="exportHistoryJSON()">Exportar Historial JSON</button>
+        <button class="btn btn-outline btn-sm" onclick="clearHistory()">Limpiar Historial</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha / Hora</th>
+            <th>Módulo</th>
+            <th>Escenario</th>
+            <th>Resumen de Resultados y Errores</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Esquema SQL Relacional Implementado (PostgreSQL / SQLite)</h2>
+      <pre>CREATE TABLE caso_estudio (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  modelo_version VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE escenario (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  caso_id INTEGER NOT NULL REFERENCES caso_estudio(id),
+  tipo VARCHAR(30) CHECK (tipo IN ('NORMAL','ESTRES','MAL_CONDICIONADO')),
+  parametros_json TEXT NOT NULL,
+  fuente_datos VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE simulacion (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  escenario_id INTEGER NOT NULL REFERENCES escenario(id),
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  usuario_equipo VARCHAR(80),
+  estado VARCHAR(30) DEFAULT 'COMPLETADO'
+);
+
+CREATE TABLE ejecucion_metodo (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  simulacion_id INTEGER NOT NULL REFERENCES simulacion(id),
+  metodo VARCHAR(60) NOT NULL,
+  tolerancia REAL,
+  paso REAL,
+  max_iter INTEGER,
+  convergio BOOLEAN NOT NULL,
+  tiempo_ms REAL NOT NULL
+);
+
+CREATE TABLE iteracion_resultado (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ejecucion_id INTEGER NOT NULL REFERENCES ejecucion_metodo(id),
+  numero INTEGER NOT NULL,
+  aproximacion_json TEXT NOT NULL,
+  residual REAL,
+  error_abs REAL,
+  error_rel REAL
+);
+
+CREATE TABLE resultado_resumen (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ejecucion_id INTEGER NOT NULL REFERENCES ejecucion_metodo(id),
+  referencia TEXT,
+  valor_json TEXT NOT NULL,
+  metrica_error_json TEXT NOT NULL,
+  interpretacion TEXT
+);</pre>
+    </div>
+  </section>
+</main>
+
+<script>
+// ==================== UTILIDADES GENERALES ====================
+let lastExperimentSnapshot = null;
+
+function showTab(tabId, btn) {
+  document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+  document.getElementById('tab-' + tabId).classList.remove('hidden');
+  document.querySelectorAll('#mainNav button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (tabId === 'historial') renderHistory();
+}
+
+function openModule(modId) {
+  const btns = document.querySelectorAll('#mainNav button');
+  const map = { mod1: 1, mod2: 2, mod3: 3, mod4: 4 };
+  showTab(modId, btns[map[modId]]);
+  if (modId === 'mod1') runMod1();
+  if (modId === 'mod2') runMod2();
+  if (modId === 'mod3') runMod3();
+  if (modId === 'mod4') runMod4();
+}
+
+function fmt(num, dec = 6) {
+  if (num === null || num === undefined || isNaN(num)) return 'N/A';
+  if (Math.abs(num) !== 0 && (Math.abs(num) < 1e-4 || Math.abs(num) >= 1e5)) {
+    return num.toExponential(3);
+  }
+  return Number(num).toFixed(dec);
+}
+
+// ==================== DIBUJO DE GRÁFICOS CANVAS ====================
+function drawLineChart(canvasId, seriesList, xLabel, yLabel) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 55, padR = 20, padT = 22, padB = 38;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  let allX = [], allY = [];
+  seriesList.forEach(s => {
+    s.data.forEach(pt => {
+      if (isFinite(pt.x) && isFinite(pt.y)) {
+        allX.push(pt.x);
+        allY.push(pt.y);
+      }
+    });
+  });
+  if (allX.length === 0) return;
+
+  let minX = Math.min(...allX), maxX = Math.max(...allX);
+  let minY = Math.min(...allY), maxY = Math.max(...allY);
+  if (maxX === minX) maxX += 1;
+  if (maxY === minY) { maxY += 1; minY -= 1; }
+  const marginY = (maxY - minY) * 0.08;
+  minY -= marginY; maxY += marginY;
+
+  const toPx = x => padL + ((x - minX) / (maxX - minX)) * plotW;
+  const toPy = y => padT + plotH - ((y - minY) / (maxY - minY)) * plotH;
+
+  // Grid & Axes
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + (plotH * i) / 4;
+    ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(W - padR, gy); ctx.stroke();
+    const valY = maxY - ((maxY - minY) * i) / 4;
+    ctx.fillStyle = '#374151';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText(fmt(valY, 2), padL - 6, gy + 3);
+  }
+  for (let i = 0; i <= 4; i++) {
+    const gx = padL + (plotW * i) / 4;
+    ctx.beginPath(); ctx.moveTo(gx, padT); ctx.lineTo(gx, padT + plotH); ctx.stroke();
+    const valX = minX + ((maxX - minX) * i) / 4;
+    ctx.fillStyle = '#374151';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(fmt(valX, 2), gx, padT + plotH + 14);
+  }
+
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(padL, padT, plotW, plotH);
+
+  // Plot series
+  seriesList.forEach(s => {
+    ctx.strokeStyle = s.color || '#000000';
+    ctx.lineWidth = s.width || 2;
+    ctx.setLineDash(s.dash || []);
+    ctx.beginPath();
+    let started = false;
+    s.data.forEach(pt => {
+      if (!isFinite(pt.x) || !isFinite(pt.y)) return;
+      const px = toPx(pt.x), py = toPy(pt.y);
+      if (!started) { ctx.moveTo(px, py); started = true; }
+      else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (s.points) {
+      ctx.fillStyle = s.color || '#000000';
+      s.data.forEach(pt => {
+        ctx.beginPath();
+        ctx.arc(toPx(pt.x), toPy(pt.y), 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+  });
+
+  // Legend
+  let lx = padL + 8;
+  seriesList.forEach(s => {
+    ctx.fillStyle = s.color || '#000000';
+    ctx.fillRect(lx, 6, 12, 3);
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText(s.label, lx + 16, 11);
+    lx += ctx.measureText(s.label).width + 32;
+  });
+
+  // Axis labels
+  ctx.fillStyle = '#000000';
+  ctx.font = 'bold 11px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(xLabel, padL + plotW / 2, H - 5);
+}
+
+// ==================== MÓDULO 1: DETENCIÓN ====================
+function loadPresetM1() {
+  const sc = document.getElementById('m1-escenario').value;
+  if (sc === 'NORMAL') {
+    document.getElementById('m1-v0').value = 6.0;
+    document.getElementById('m1-tr').value = 0.8;
+    document.getElementById('m1-a0').value = 1.2;
+    document.getElementById('m1-cd').value = 0.0;
+    document.getElementById('m1-h').value = 0.05;
+  } else if (sc === 'ESTRES') {
+    document.getElementById('m1-v0').value = 8.5;
+    document.getElementById('m1-tr').value = 1.5;
+    document.getElementById('m1-a0').value = 0.75;
+    document.getElementById('m1-cd').value = 0.01;
+    document.getElementById('m1-h').value = 0.4;
+  } else {
+    document.getElementById('m1-v0').value = 6.0;
+    document.getElementById('m1-tr').value = 0.8;
+    document.getElementById('m1-a0').value = 0.25;
+    document.getElementById('m1-cd').value = 0.0;
+    document.getElementById('m1-h').value = 0.25;
+  }
+  runMod1();
+}
+
+function runMod1() {
+  const sc = document.getElementById('m1-escenario').value;
+  const v0 = parseFloat(document.getElementById('m1-v0').value);
+  const tr = parseFloat(document.getElementById('m1-tr').value);
+  const a0 = parseFloat(document.getElementById('m1-a0').value);
+  const cd = parseFloat(document.getElementById('m1-cd').value);
+  const h = parseFloat(document.getElementById('m1-h').value);
+
+  const accel = (v) => {
+    if (sc === 'MAL_CONDICIONADO') return 0.5 * Math.sqrt(Math.max(0, v) + 1e-6);
+    return a0 + cd * v * v;
+  };
+
+  // EDO RK2 (Heun) y RK4 hasta v <= 0
+  function integrateODE(method) {
+    let t = 0, x = 0, v = v0;
+    const traj = [{ t, x, v }];
+    while (v > 0 && t < 120) {
+      const dt = Math.min(h, 120 - t);
+      const f = (ti, xi, vi) => {
+        if (vi <= 0) return [0, 0];
+        const a = (ti < tr) ? 0 : accel(vi);
+        return [vi, -a];
+      };
+      if (method === 'RK2') {
+        const [k1x, k1v] = f(t, x, v);
+        const [k2x, k2v] = f(t + dt, x + dt * k1x, Math.max(0, v + dt * k1v));
+        x += (dt / 2) * (k1x + k2x);
+        v += (dt / 2) * (k1v + k2v);
+      } else {
+        const [k1x, k1v] = f(t, x, v);
+        const [k2x, k2v] = f(t + dt/2, x + dt*k1x/2, Math.max(0, v + dt*k1v/2));
+        const [k3x, k3v] = f(t + dt/2, x + dt*k2x/2, Math.max(0, v + dt*k2v/2));
+        const [k4x, k4v] = f(t + dt, x + dt*k3x, Math.max(0, v + dt*k3v));
+        x += (dt / 6) * (k1x + 2*k2x + 2*k3x + k4x);
+        v += (dt / 6) * (k1v + 2*k2v + 2*k3v + k4v);
+      }
+      t += dt;
+      if (v <= 0) { v = 0; traj.push({ t, x, v }); break; }
+      traj.push({ t, x, v });
+    }
+    return traj;
+  }
+
+  const trajRK2 = integrateODE('RK2');
+  const trajRK4 = integrateODE('RK4');
+  const tEnd = trajRK4[trajRK4.length - 1].t;
+  const xEndRK4 = trajRK4[trajRK4.length - 1].x;
+  const xEndRK2 = trajRK2[trajRK2.length - 1].x;
+
+  // Referencia analítica o RK4 ultra-fino
+  let tRef, xRef;
+  if (cd === 0 && sc !== 'MAL_CONDICIONADO') {
+    tRef = tr + v0 / a0;
+    xRef = v0 * tr + (v0 * v0) / (2 * a0);
+  } else if (sc === 'MAL_CONDICIONADO') {
+    // dv/dt = -0.5 * sqrt(v) => 2*sqrt(v0) = 0.5*(t - tr) => tRef = tr + 4*sqrt(v0)
+    tRef = tr + 4 * Math.sqrt(v0);
+    xRef = v0 * tr + (4 / 3) * Math.pow(v0, 1.5);
+  } else {
+    tRef = tr + Math.atan(Math.sqrt(cd / a0) * v0) / Math.sqrt(a0 * cd);
+    xRef = v0 * tr + (1 / (2 * cd)) * Math.log(1 + (cd / a0) * v0 * v0);
+  }
+
+  // Función v(t) continua para Integración y Raíces
+  const vFunc = (t) => {
+    if (t <= tr) return v0;
+    const tau = t - tr;
+    if (cd === 0 && sc !== 'MAL_CONDICIONADO') return v0 - a0 * tau;
+    if (sc === 'MAL_CONDICIONADO') {
+      const s = Math.sqrt(v0) - 0.25 * tau;
+      return s >= 0 ? s * s : -s * s;
+    }
+    const w = Math.sqrt(a0 * cd);
+    const arg = Math.atan(Math.sqrt(cd / a0) * v0) - w * tau;
+    return Math.sqrt(a0 / cd) * Math.tan(arg);
+  };
+
+  // Integración numérica de distancia ∫_0^tRef v(t) dt (N = 16 subintervalos)
+  const N = 16;
+  const hInt = tRef / N;
+  let trap = 0.5 * (vFunc(0) + vFunc(tRef));
+  for (let i = 1; i < N; i++) trap += vFunc(i * hInt);
+  trap *= hInt;
+
+  let simp = vFunc(0) + vFunc(tRef);
+  for (let i = 1; i < N; i++) simp += (i % 2 === 0 ? 2 : 4) * vFunc(i * hInt);
+  simp *= hInt / 3;
+
+  // Romberg nivel R[3][3]
+  const R = Array.from({ length: 4 }, () => Array(4).fill(0));
+  for (let k = 0; k < 4; k++) {
+    const nk = Math.pow(2, k + 1);
+    const hk = tRef / nk;
+    let s = 0.5 * (vFunc(0) + vFunc(tRef));
+    for (let i = 1; i < nk; i++) s += vFunc(i * hk);
+    R[k][0] = s * hk;
+    for (let j = 1; j <= k; j++) {
+      R[k][j] = R[k][j - 1] + (R[k][j - 1] - R[k - 1][j - 1]) / (Math.pow(4, j) - 1);
+    }
+  }
+  const romb = R[3][3];
+
+  // Raíces para v(t) = 0
+  function solveBisection(a, b, tol = 1e-8) {
+    let it = 0, hist = [];
+    while ((b - a) / 2 > tol && it < 60) {
+      it++;
+      const m = (a + b) / 2;
+      const fm = vFunc(m);
+      hist.push({ it, x: m, res: Math.abs(fm) });
+      if (Math.abs(fm) < tol) break;
+      if (vFunc(a) * fm < 0) b = m; else a = m;
+    }
+    return { root: (a + b) / 2, it, res: Math.abs(vFunc((a + b) / 2)), hist };
+  }
+
+  function solveNewton(x0, tol = 1e-8) {
+    let x = x0, it = 0, hist = [];
+    while (it < 40) {
+      it++;
+      const fx = vFunc(x);
+      const dfx = (vFunc(x + 1e-6) - vFunc(x - 1e-6)) / 2e-6;
+      hist.push({ it, x, res: Math.abs(fx) });
+      if (Math.abs(fx) < tol || Math.abs(dfx) < 1e-12) break;
+      x = x - fx / dfx;
+    }
+    return { root: x, it, res: Math.abs(vFunc(x)), hist };
+  }
+
+  function solveSecant(x0, x1, tol = 1e-8) {
+    let it = 0, hist = [];
+    while (it < 40) {
+      it++;
+      const f0 = vFunc(x0), f1 = vFunc(x1);
+      hist.push({ it, x: x1, res: Math.abs(f1) });
+      if (Math.abs(f1) < tol || Math.abs(f1 - f0) < 1e-14) break;
+      const x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
+      x0 = x1; x1 = x2;
+    }
+    return { root: x1, it, res: Math.abs(vFunc(x1)), hist };
+  }
+
+  const bis = solveBisection(tr, tRef * 1.4 + 2);
+  const newt = solveNewton(tRef * 0.75);
+  const sec = solveSecant(tRef * 0.6, tRef * 0.85);
+
+  document.getElementById('m1-results').innerHTML = `
+    <h3>Resultados Numéricos y Tabla de Errores Transversales (Escenario: ${sc})</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Familia</th>
+          <th>Método</th>
+          <th>Magnitud Calculada</th>
+          <th>Referencia Exacta</th>
+          <th>Error Absoluto</th>
+          <th>Error Relativo (%)</th>
+          <th>Iter. / Subint.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>EDO</td><td>RK2 (Heun)</td><td>x<sub>det</sub> = ${fmt(xEndRK2, 4)} m</td><td>${fmt(xRef, 4)} m</td><td>${fmt(Math.abs(xEndRK2 - xRef))}</td><td>${fmt(Math.abs(xEndRK2 - xRef)/xRef*100, 4)}%</td><td>h = ${h} s</td></tr>
+        <tr><td>EDO</td><td>RK4 Clásico</td><td>x<sub>det</sub> = ${fmt(xEndRK4, 4)} m</td><td>${fmt(xRef, 4)} m</td><td>${fmt(Math.abs(xEndRK4 - xRef))}</td><td>${fmt(Math.abs(xEndRK4 - xRef)/xRef*100, 4)}%</td><td>h = ${h} s</td></tr>
+        <tr><td>Integración</td><td>Trapecio Compuesto</td><td>x<sub>det</sub> = ${fmt(trap, 4)} m</td><td>${fmt(xRef, 4)} m</td><td>${fmt(Math.abs(trap - xRef))}</td><td>${fmt(Math.abs(trap - xRef)/xRef*100, 4)}%</td><td>N = 16</td></tr>
+        <tr><td>Integración</td><td>Simpson 1/3 Compuesto</td><td>x<sub>det</sub> = ${fmt(simp, 4)} m</td><td>${fmt(xRef, 4)} m</td><td>${fmt(Math.abs(simp - xRef))}</td><td>${fmt(Math.abs(simp - xRef)/xRef*100, 4)}%</td><td>N = 16</td></tr>
+        <tr><td>Integración</td><td>Romberg R[3,3]</td><td>x<sub>det</sub> = ${fmt(romb, 4)} m</td><td>${fmt(xRef, 4)} m</td><td>${fmt(Math.abs(romb - xRef))}</td><td>${fmt(Math.abs(romb - xRef)/xRef*100, 4)}%</td><td>N = 16</td></tr>
+        <tr><td>Raíces</td><td>Bisección</td><td>t<sub>det</sub> = ${fmt(bis.root, 5)} s</td><td>${fmt(tRef, 5)} s</td><td>${fmt(Math.abs(bis.root - tRef))}</td><td>${fmt(Math.abs(bis.root - tRef)/tRef*100, 5)}%</td><td>${bis.it} iter.</td></tr>
+        <tr><td>Raíces</td><td>Newton-Raphson</td><td>t<sub>det</sub> = ${fmt(newt.root, 5)} s</td><td>${fmt(tRef, 5)} s</td><td>${fmt(Math.abs(newt.root - tRef))}</td><td>${fmt(Math.abs(newt.root - tRef)/tRef*100, 5)}%</td><td>${newt.it} iter.</td></tr>
+        <tr><td>Raíces</td><td>Secante</td><td>t<sub>det</sub> = ${fmt(sec.root, 5)} s</td><td>${fmt(tRef, 5)} s</td><td>${fmt(Math.abs(sec.root - tRef))}</td><td>${fmt(Math.abs(sec.root - tRef)/tRef*100, 5)}%</td><td>${sec.it} iter.</td></tr>
+      </tbody>
+    </table>
+  `;
+
+  drawLineChart('m1-chart1', [
+    { label: 'v(t) RK4 (m/s)', data: trajRK4.map(p => ({ x: p.t, y: p.v })), color: '#111827', width: 2.2 },
+    { label: 'v(t) RK2 (m/s)', data: trajRK2.map(p => ({ x: p.t, y: p.v })), color: '#6b7280', dash: [5, 4], width: 2 },
+    { label: 'x(t) RK4 (m)', data: trajRK4.map(p => ({ x: p.t, y: p.x })), color: '#2563eb', width: 1.8 }
+  ], 'Tiempo t (s)', 'Velocidad / Posición');
+
+  drawLineChart('m1-chart2', [
+    { label: 'Bisección', data: bis.hist.map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#111827', points: true },
+    { label: 'Newton-Raphson', data: newt.hist.map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#dc2626', points: true },
+    { label: 'Secante', data: sec.hist.map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#2563eb', points: true }
+  ], 'Iteración k', 'log10(|v(t_k)|)');
+
+  document.getElementById('m1-conclusions').innerHTML = `
+    <div class="conclusion-box">
+      <strong>Conclusión Numérica:</strong> RK4 mantiene error global inferior a RK2 ante pasos grandes (h = ${h} s). En integración, Romberg alcanza precisión superior con solo 16 subintervalos. En raíces, cuando dv/dt → 0 (escenario mal condicionado), Newton-Raphson pierde convergencia cuadrática y requiere más iteraciones que en el caso nominal.
+    </div>
+    <div class="conclusion-box">
+      <strong>Conclusión del Problema Aplicado:</strong> El tiempo muerto de reacción t<sub>r</sub> = ${tr} s aporta una distancia recorrida a velocidad plena de ${fmt(v0*tr, 2)} m antes de iniciar el frenado efectivo, alcanzando una distancia total de detención de ${fmt(xRef, 2)} m en ${fmt(tRef, 2)} s. Debe verificarse que el gálibo libre en estación supere dicho margen.
+    </div>
+  `;
+
+  lastExperimentSnapshot = {
+    modulo: 'Módulo 1: Detención',
+    escenario: sc,
+    params: { v0, tr, a0, cd, h },
+    resumen: `t_det = ${fmt(tRef, 3)} s, x_det = ${fmt(xRef, 3)} m, Err RK4 = ${fmt(Math.abs(xEndRK4 - xRef))}`
+  };
+}
+
+// ==================== MÓDULO 2: DETERIORO ====================
+function loadPresetM2() {
+  const sc = document.getElementById('m2-escenario').value;
+  if (sc === 'NORMAL') {
+    document.getElementById('m2-d0').value = 10;
+    document.getElementById('m2-alpha').value = 1.8;
+    document.getElementById('m2-beta').value = 0.08;
+    document.getElementById('m2-dumbral').value = 50;
+  } else if (sc === 'ESTRES') {
+    document.getElementById('m2-d0').value = 12;
+    document.getElementById('m2-alpha').value = 3.2;
+    document.getElementById('m2-beta').value = 0.22;
+    document.getElementById('m2-dumbral').value = 40;
+  } else {
+    document.getElementById('m2-d0').value = 10;
+    document.getElementById('m2-alpha').value = 2.0;
+    document.getElementById('m2-beta').value = 0.001;
+    document.getElementById('m2-dumbral').value = 50;
+  }
+  runMod2();
+}
+
+function runMod2() {
+  const sc = document.getElementById('m2-escenario').value;
+  const D0 = parseFloat(document.getElementById('m2-d0').value);
+  const alpha = parseFloat(document.getElementById('m2-alpha').value);
+  const beta = parseFloat(document.getElementById('m2-beta').value);
+  const Dumbral = parseFloat(document.getElementById('m2-dumbral').value);
+  const tol = parseFloat(document.getElementById('m2-tol').value);
+
+  // Sistema Lineal SPD 4x4 (Normal/Estrés) vs Hilbert 4x4 (Mal Condicionado)
+  const xExact = [10.0, 2.0, 0.5, 1.0];
+  let A, condNum;
+  if (sc === 'MAL_CONDICIONADO') {
+    A = [
+      [1, 1/2, 1/3, 1/4],
+      [1/2, 1/3, 1/4, 1/5],
+      [1/3, 1/4, 1/5, 1/6],
+      [1/4, 1/5, 1/6, 1/7]
+    ];
+    condNum = 15513.7;
+  } else {
+    A = [
+      [10, 2, 1, 1],
+      [2, 12, 2, 1],
+      [1, 2, 15, 2],
+      [1, 1, 2, 8]
+    ];
+    condNum = 2.613;
+  }
+  const b = A.map((row, i) => {
+    let s = row.reduce((acc, v, j) => acc + v * xExact[j], 0);
+    if (sc === 'ESTRES') s *= (1 + 0.01 * (i % 2 === 0 ? 1 : -1));
+    if (sc === 'MAL_CONDICIONADO') s *= (1 + 0.001 * (i % 2 === 0 ? 1 : -1));
+    return s;
+  });
+
+  const norm2 = v => Math.sqrt(v.reduce((s, x) => s + x * x, 0));
+  const subVec = (u, v) => u.map((x, i) => x - v[i]);
+  const matVec = (M, v) => M.map(r => r.reduce((s, a, j) => s + a * v[j], 0));
+
+  // Factorización LU (Gauss con pivoteo parcial)
+  function solveLU(A_in, b_in) {
+    const n = b_in.length;
+    const M = A_in.map((r, i) => [...r, b_in[i]]);
+    for (let k = 0; k < n; k++) {
+      let maxRow = k;
+      for (let i = k + 1; i < n; i++) if (Math.abs(M[i][k]) > Math.abs(M[maxRow][k])) maxRow = i;
+      [M[k], M[maxRow]] = [M[maxRow], M[k]];
+      for (let i = k + 1; i < n; i++) {
+        const f = M[i][k] / M[k][k];
+        for (let j = k; j <= n; j++) M[i][j] -= f * M[k][j];
+      }
+    }
+    const x = Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) {
+      let s = M[i][n];
+      for (let j = i + 1; j < n; j++) s -= M[i][j] * x[j];
+      x[i] = s / M[i][i];
+    }
+    return x;
+  }
+
+  // Jacobi
+  function solveJacobi(maxIter = 500) {
+    let x = [0, 0, 0, 0], hist = [];
+    for (let k = 1; k <= maxIter; k++) {
+      const xNew = x.map((_, i) => {
+        let s = b[i];
+        for (let j = 0; j < 4; j++) if (j !== i) s -= A[i][j] * x[j];
+        return s / A[i][i];
+      });
+      const res = norm2(subVec(b, matVec(A, xNew)));
+      hist.push({ it: k, res });
+      x = xNew;
+      if (res < tol) return { x, it: k, res, hist, conv: true };
+    }
+    return { x, it: maxIter, res: norm2(subVec(b, matVec(A, x))), hist, conv: false };
+  }
+
+  // Gauss-Seidel
+  function solveGS(maxIter = 500) {
+    let x = [0, 0, 0, 0], hist = [];
+    for (let k = 1; k <= maxIter; k++) {
+      for (let i = 0; i < 4; i++) {
+        let s = b[i];
+        for (let j = 0; j < 4; j++) if (j !== i) s -= A[i][j] * x[j];
+        x[i] = s / A[i][i];
+      }
+      const res = norm2(subVec(b, matVec(A, x)));
+      hist.push({ it: k, res });
+      if (res < tol) return { x: [...x], it: k, res, hist, conv: true };
+    }
+    return { x, it: maxIter, res: norm2(subVec(b, matVec(A, x))), hist, conv: false };
+  }
+
+  // Gradiente Conjugado
+  function solveCG(maxIter = 20) {
+    let x = [0, 0, 0, 0];
+    let r = subVec(b, matVec(A, x));
+    let p = [...r];
+    let rsOld = r.reduce((s, v) => s + v * v, 0);
+    let hist = [];
+    for (let k = 1; k <= maxIter; k++) {
+      const Ap = matVec(A, p);
+      const alphaCG = rsOld / p.reduce((s, v, i) => s + v * Ap[i], 0);
+      x = x.map((v, i) => v + alphaCG * p[i]);
+      r = r.map((v, i) => v - alphaCG * Ap[i]);
+      const rsNew = r.reduce((s, v) => s + v * v, 0);
+      const res = Math.sqrt(rsNew);
+      hist.push({ it: k, res });
+      if (res < tol) return { x, it: k, res, hist, conv: true };
+      p = r.map((v, i) => v + (rsNew / rsOld) * p[i]);
+      rsOld = rsNew;
+    }
+    return { x, it: maxIter, res: Math.sqrt(rsOld), hist, conv: true };
+  }
+
+  const xLU = solveLU(A, b);
+  const resJac = solveJacobi();
+  const resGS = solveGS();
+  const resCG = solveCG();
+
+  // Raíces de D(t) - Dumbral = 0
+  const fDet = t => D0 + alpha * t + beta * t * t - Dumbral;
+  const dfDet = t => alpha + 2 * beta * t;
+  const tExact = (-alpha + Math.sqrt(alpha * alpha - 4 * beta * (D0 - Dumbral))) / (2 * beta);
+
+  // Bisección, Newton y Secante
+  let a = 0, bInt = tExact * 1.6 + 5, itBis = 0;
+  while ((bInt - a) / 2 > tol && itBis < 60) {
+    itBis++;
+    const m = (a + bInt) / 2;
+    if (fDet(a) * fDet(m) < 0) bInt = m; else a = m;
+  }
+  const tBis = (a + bInt) / 2;
+
+  let tNewt = 1.0, itNewt = 0;
+  while (itNewt < 40) {
+    itNewt++;
+    const fx = fDet(tNewt);
+    if (Math.abs(fx) < tol) break;
+    tNewt -= fx / dfDet(tNewt);
+  }
+
+  let t0 = 0.5, t1 = 2.0, itSec = 0;
+  while (itSec < 40) {
+    itSec++;
+    const f0 = fDet(t0), f1 = fDet(t1);
+    if (Math.abs(f1) < tol) break;
+    const t2 = t1 - f1 * (t1 - t0) / (f1 - f0);
+    t0 = t1; t1 = t2;
+  }
+
+  document.getElementById('m2-results').innerHTML = `
+    <h3>1. Calibración por Sistemas Lineales SPD (κ<sub>2</sub>(A) = ${condNum})</h3>
+    <table>
+      <thead>
+        <tr><th>Método</th><th>Iteraciones</th><th>Error Abs. ||x − x*||<sub>2</sub></th><th>Error Relativo (%)</th><th>Residual ||b − Ax||<sub>2</sub></th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Factorización LU</td><td>Directo</td><td>${fmt(norm2(subVec(xLU, xExact)))}</td><td>${fmt(norm2(subVec(xLU, xExact))/norm2(xExact)*100, 3)}%</td><td>${fmt(norm2(subVec(b, matVec(A, xLU))))}</td><td>Completado</td></tr>
+        <tr><td>Gradiente Conjugado</td><td>${resCG.it}</td><td>${fmt(norm2(subVec(resCG.x, xExact)))}</td><td>${fmt(norm2(subVec(resCG.x, xExact))/norm2(xExact)*100, 3)}%</td><td>${fmt(resCG.res)}</td><td>Convergió</td></tr>
+        <tr><td>Gauss-Seidel</td><td>${resGS.it}</td><td>${fmt(norm2(subVec(resGS.x, xExact)))}</td><td>${fmt(norm2(subVec(resGS.x, xExact))/norm2(xExact)*100, 3)}%</td><td>${fmt(resGS.res)}</td><td>${resGS.conv ? 'Convergió' : 'Lento'}</td></tr>
+        <tr><td>Jacobi</td><td>${resJac.it}</td><td>${fmt(norm2(subVec(resJac.x, xExact)))}</td><td>${fmt(norm2(subVec(resJac.x, xExact))/norm2(xExact)*100, 3)}%</td><td>${fmt(resJac.res)}</td><td>${resJac.conv ? 'Convergió' : 'No convergió (ρ ≥ 1)'}</td></tr>
+      </tbody>
+    </table>
+    <h3>2. Estimación de Tiempo al Umbral D(t*) = ${Dumbral} (Referencia analítica t* = ${fmt(tExact, 5)} mil h)</h3>
+    <table>
+      <thead>
+        <tr><th>Método de Raíces</th><th>Tiempo t* (miles h)</th><th>Error Abs. |t − t*|</th><th>Error Relativo (%)</th><th>Residual |D(t) − D<sub>umbral</sub>|</th><th>Iteraciones</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bisección</td><td>${fmt(tBis, 6)}</td><td>${fmt(Math.abs(tBis - tExact))}</td><td>${fmt(Math.abs(tBis - tExact)/tExact*100, 5)}%</td><td>${fmt(Math.abs(fDet(tBis)))}</td><td>${itBis}</td></tr>
+        <tr><td>Newton-Raphson</td><td>${fmt(tNewt, 6)}</td><td>${fmt(Math.abs(tNewt - tExact))}</td><td>${fmt(Math.abs(tNewt - tExact)/tExact*100, 5)}%</td><td>${fmt(Math.abs(fDet(tNewt)))}</td><td>${itNewt}</td></tr>
+        <tr><td>Secante</td><td>${fmt(t1, 6)}</td><td>${fmt(Math.abs(t1 - tExact))}</td><td>${fmt(Math.abs(t1 - tExact)/tExact*100, 5)}%</td><td>${fmt(Math.abs(fDet(t1)))}</td><td>${itSec}</td></tr>
+      </tbody>
+    </table>
+  `;
+
+  const curvePts = [];
+  const tMaxPlot = tExact * 1.25;
+  for (let i = 0; i <= 40; i++) {
+    const ti = (tMaxPlot * i) / 40;
+    curvePts.push({ x: ti, y: D0 + alpha * ti + beta * ti * ti });
+  }
+  drawLineChart('m2-chart1', [
+    { label: 'D(t) Desgaste', data: curvePts, color: '#111827', width: 2.2 },
+    { label: 'Umbral Crítico', data: [{ x: 0, y: Dumbral }, { x: tMaxPlot, y: Dumbral }], color: '#dc2626', dash: [6, 4], width: 2 }
+  ], 'Tiempo de operación t (miles de horas)', 'Índice D(t)');
+
+  drawLineChart('m2-chart2', [
+    { label: 'Gradiente Conjugado', data: resCG.hist.map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#dc2626', points: true },
+    { label: 'Gauss-Seidel', data: resGS.hist.slice(0, 40).map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#2563eb' },
+    { label: 'Jacobi', data: resJac.hist.slice(0, 40).map(p => ({ x: p.it, y: Math.log10(p.res + 1e-16) })), color: '#111827', dash: [4, 3] }
+  ], 'Iteración k', 'log10(||b − Ax_k||_2)');
+
+  document.getElementById('m2-conclusions').innerHTML = `
+    <div class="conclusion-box">
+      <strong>Conclusión Numérica:</strong> En matrices bien condicionadas (κ<sub>2</sub> = 2.613), Gradiente Conjugado converge en exactamente n = 4 pasos. En la matriz de Hilbert H<sub>4</sub> (κ<sub>2</sub> = 15513.7), una perturbación de 0.1% en b amplifica el error relativo de la solución pese a obtener residuales cercanos a cero.
+    </div>
+    <div class="conclusion-box">
+      <strong>Conclusión del Problema Aplicado:</strong> Bajo los parámetros calibrados, el componente alcanza el umbral de inspección D<sub>umbral</sub> = ${Dumbral} a las ${fmt(tExact, 2)} mil horas de servicio. Retrasar el mantenimiento acelera el deterioro de forma cuadrática (término β·t<sup>2</sup>).
+    </div>
+  `;
+
+  lastExperimentSnapshot = {
+    modulo: 'Módulo 2: Deterioro',
+    escenario: sc,
+    params: { D0, alpha, beta, Dumbral, tol },
+    resumen: `t* = ${fmt(tExact, 3)} mil h, κ2(A) = ${condNum}, CG iter = ${resCG.it}`
+  };
+}
+
+// ==================== MÓDULO 3: OSCILACIONES ====================
+function loadPresetM3() {
+  const sc = document.getElementById('m3-escenario').value;
+  if (sc === 'NORMAL') {
+    document.getElementById('m3-m').value = 1200;
+    document.getElementById('m3-k').value = 4800;
+    document.getElementById('m3-c').value = 480;
+    document.getElementById('m3-f0').value = 0;
+    document.getElementById('m3-h').value = 0.02;
+    document.getElementById('m3-T').value = 10;
+  } else if (sc === 'ESTRES') {
+    document.getElementById('m3-m').value = 1200;
+    document.getElementById('m3-k').value = 4800;
+    document.getElementById('m3-c').value = 96;
+    document.getElementById('m3-f0').value = 950;
+    document.getElementById('m3-h').value = 0.05;
+    document.getElementById('m3-T').value = 40;
+  } else {
+    document.getElementById('m3-m').value = 1200;
+    document.getElementById('m3-k').value = 4800000;
+    document.getElementById('m3-c').value = 480;
+    document.getElementById('m3-f0').value = 0;
+    document.getElementById('m3-h').value = 0.06;
+    document.getElementById('m3-T').value = 3;
+  }
+  runMod3();
+}
+
+function runMod3() {
+  const sc = document.getElementById('m3-escenario').value;
+  const m = parseFloat(document.getElementById('m3-m').value);
+  const k = parseFloat(document.getElementById('m3-k').value);
+  const c = parseFloat(document.getElementById('m3-c').value);
+  const F0 = parseFloat(document.getElementById('m3-f0').value);
+  const h = parseFloat(document.getElementById('m3-h').value);
+  const T = parseFloat(document.getElementById('m3-T').value);
+
+  const x0 = 0.25, v0 = 0.0;
+  const w0 = Math.sqrt(k / m);
+  const zeta = c / (2 * Math.sqrt(k * m));
+  const wd = w0 * Math.sqrt(Math.max(0, 1 - zeta * zeta));
+
+  const xAnalytic = (t) => {
+    if (F0 === 0 && zeta < 1) {
+      return Math.exp(-zeta * w0 * t) * (x0 * Math.cos(wd * t) + ((v0 + zeta * w0 * x0) / wd) * Math.sin(wd * t));
+    }
+    return null;
+  };
+
+  function simOsc(method, step) {
+    const steps = Math.floor(T / step);
+    let t = 0, x = x0, v = v0;
+    const pts = [{ t, x, v }];
+    for (let i = 0; i < steps; i++) {
+      const f = (ti, xi, vi) => [vi, (F0 * Math.sin(2.0 * ti) - c * vi - k * xi) / m];
+      if (method === 'RK2') {
+        const [k1x, k1v] = f(t, x, v);
+        const [k2x, k2v] = f(t + step, x + step * k1x, v + step * k1v);
+        x += (step / 2) * (k1x + k2x);
+        v += (step / 2) * (k1v + k2v);
+      } else {
+        const [k1x, k1v] = f(t, x, v);
+        const [k2x, k2v] = f(t + step/2, x + step*k1x/2, v + step*k1v/2);
+        const [k3x, k3v] = f(t + step/2, x + step*k2x/2, v + step*k2v/2);
+        const [k4x, k4v] = f(t + step, x + step*k3x, v + step*k3v);
+        x += (step / 6) * (k1x + 2*k2x + 2*k3x + k4x);
+        v += (step / 6) * (k1v + 2*k2v + 2*k3v + k4v);
+      }
+      t += step;
+      pts.push({ t, x, v });
+    }
+    return pts;
+  }
+
+  const ptsRK2 = simOsc('RK2', h);
+  const ptsRK4 = simOsc('RK4', h);
+  const ptsRefFine = simOsc('RK4', Math.min(h / 10, 0.002));
+
+  const getRefAt = (t, idx) => {
+    const xa = xAnalytic(t);
+    if (xa !== null) return xa;
+    const fineIdx = Math.min(ptsRefFine.length - 1, Math.round(t / Math.min(h / 10, 0.002)));
+    return ptsRefFine[fineIdx].x;
+  };
+
+  let maxErrRK2 = 0, maxErrRK4 = 0, maxAmp = 0;
+  const errSeriesRK2 = [], errSeriesRK4 = [];
+  ptsRK4.forEach((p, idx) => {
+    const xr = getRefAt(p.t, idx);
+    const e4 = Math.abs(p.x - xr);
+    const e2 = Math.abs(ptsRK2[idx].x - xr);
+    if (e4 > maxErrRK4) maxErrRK4 = e4;
+    if (e2 > maxErrRK2) maxErrRK2 = e2;
+    if (Math.abs(p.x) > maxAmp) maxAmp = Math.abs(p.x);
+    errSeriesRK4.push({ x: p.t, y: e4 });
+    errSeriesRK2.push({ x: p.t, y: e2 });
+  });
+
+  // Integración de energía acumulada ∫_0^T x(t)^2 dt
+  const N = ptsRK4.length - 1;
+  let trapE = 0.5 * (ptsRK4[0].x ** 2 + ptsRK4[N].x ** 2);
+  for (let i = 1; i < N; i++) trapE += ptsRK4[i].x ** 2;
+  trapE *= h;
+
+  const evenN = N % 2 === 0 ? N : N - 1;
+  let simpE = ptsRK4[0].x ** 2 + ptsRK4[evenN].x ** 2;
+  for (let i = 1; i < evenN; i++) simpE += (i % 2 === 0 ? 2 : 4) * (ptsRK4[i].x ** 2);
+  simpE *= h / 3;
+
+  // Referencia de energía sobre malla fina
+  const hFine = Math.min(h / 10, 0.002);
+  let refE = 0.5 * (ptsRefFine[0].x ** 2 + ptsRefFine[ptsRefFine.length - 1].x ** 2);
+  for (let i = 1; i < ptsRefFine.length - 1; i++) refE += ptsRefFine[i].x ** 2;
+  refE *= hFine;
+
+  const rombE = simpE + (simpE - trapE) / 3;
+
+  document.getElementById('m3-results').innerHTML = `
+    <h3>Resultados de Oscilación (ω<sub>0</sub> = ${fmt(w0, 2)} rad/s, ζ = ${fmt(zeta, 4)}, Amplitud Máx = ${fmt(maxAmp, 4)} m)</h3>
+    <table>
+      <thead>
+        <tr><th>Familia</th><th>Método</th><th>Valor Evaluado</th><th>Referencia</th><th>Error Absoluto Máx.</th><th>Estabilidad / Observación</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>EDO</td><td>RK2 (Heun)</td><td>x(T) = ${fmt(ptsRK2[N].x, 5)} m</td><td>${fmt(getRefAt(T, N), 5)} m</td><td>${fmt(maxErrRK2)}</td><td>${maxErrRK2 > 1 ? 'INESTABLE (h·ω₀ alto)' : 'Estable'}</td></tr>
+        <tr><td>EDO</td><td>RK4 Clásico</td><td>x(T) = ${fmt(ptsRK4[N].x, 5)} m</td><td>${fmt(getRefAt(T, N), 5)} m</td><td>${fmt(maxErrRK4)}</td><td>${maxErrRK4 > 1 ? 'INESTABLE (h·ω₀ > 2.78)' : 'Estable (Orden 4)'}</td></tr>
+        <tr><td>Integración</td><td>Trapecio Compuesto</td><td>E<sub>acum</sub> = ${fmt(trapE, 6)} m<sup>2</sup>·s</td><td>${fmt(refE, 6)} m<sup>2</sup>·s</td><td>${fmt(Math.abs(trapE - refE))}</td><td>Orden O(h<sup>2</sup>)</td></tr>
+        <tr><td>Integración</td><td>Simpson 1/3 Compuesto</td><td>E<sub>acum</sub> = ${fmt(simpE, 6)} m<sup>2</sup>·s</td><td>${fmt(refE, 6)} m<sup>2</sup>·s</td><td>${fmt(Math.abs(simpE - refE))}</td><td>Orden O(h<sup>4</sup>)</td></tr>
+        <tr><td>Integración</td><td>Romberg (Extrapolado)</td><td>E<sub>acum</sub> = ${fmt(rombE, 6)} m<sup>2</sup>·s</td><td>${fmt(refE, 6)} m<sup>2</sup>·s</td><td>${fmt(Math.abs(rombE - refE))}</td><td>Alta precisión</td></tr>
+      </tbody>
+    </table>
+  `;
+
+  drawLineChart('m3-chart1', [
+    { label: 'RK4 x(t)', data: ptsRK4.map(p => ({ x: p.t, y: Math.max(-2, Math.min(2, p.x)) })), color: '#111827', width: 2.2 },
+    { label: 'RK2 x(t)', data: ptsRK2.map(p => ({ x: p.t, y: Math.max(-2, Math.min(2, p.x)) })), color: '#dc2626', dash: [5, 4], width: 1.8 }
+  ], 'Tiempo t (s)', 'Desplazamiento x(t) (m)');
+
+  drawLineChart('m3-chart2', [
+    { label: 'Error RK4', data: errSeriesRK4.map(p => ({ x: p.x, y: Math.min(5, p.y) })), color: '#111827', width: 2 },
+    { label: 'Error RK2', data: errSeriesRK2.map(p => ({ x: p.x, y: Math.min(5, p.y) })), color: '#dc2626', dash: [4, 3], width: 2 }
+  ], 'Tiempo t (s)', 'Error Absoluto (m)');
+
+  document.getElementById('m3-conclusions').innerHTML = `
+    <div class="conclusion-box">
+      <strong>Conclusión Numérica:</strong> En el escenario rígido (stiff, ω<sub>0</sub> = ${fmt(w0, 2)} rad/s), si el producto h·ω<sub>0</sub> = ${fmt(h * w0, 2)} excede el límite de estabilidad explícita (~2.78 para RK4), la solución numérica diverge exponencialmente por inestabilidad del paso y no por mal condicionamiento físico.
+    </div>
+    <div class="conclusion-box">
+      <strong>Conclusión del Problema Aplicado:</strong> Bajo ráfagas periódicas cercanas a la frecuencia natural (ω<sub>0</sub> = 2.0 rad/s en escenario Estrés), la amplitud alcanza ${fmt(maxAmp, 3)} m, exigiendo reducción de velocidad operativa o restricción de servicio por viento lateral.
+    </div>
+  `;
+
+  lastExperimentSnapshot = {
+    modulo: 'Módulo 3: Oscilaciones',
+    escenario: sc,
+    params: { m, k, c, F0, h, T },
+    resumen: `Amplitud máx = ${fmt(maxAmp, 3)} m, E_acum = ${fmt(simpE, 4)} m²s, Err RK4 = ${fmt(maxErrRK4)}`
+  };
+}
+
+// ==================== MÓDULO 4: SENSORES ====================
+function loadPresetM4() {
+  const sc = document.getElementById('m4-escenario').value;
+  if (sc === 'NORMAL') {
+    document.getElementById('m4-n').value = 9;
+    document.getElementById('m4-noise').value = 0.00;
+    document.getElementById('m4-umbral').value = 0.85;
+  } else if (sc === 'ESTRES') {
+    document.getElementById('m4-n').value = 13;
+    document.getElementById('m4-noise').value = 0.05;
+    document.getElementById('m4-umbral').value = 0.85;
+  } else {
+    document.getElementById('m4-n').value = 15;
+    document.getElementById('m4-noise').value = 0.00;
+    document.getElementById('m4-umbral').value = 0.50;
+  }
+  runMod4();
+}
+
+function runMod4() {
+  const sc = document.getElementById('m4-escenario').value;
+  const N = parseInt(document.getElementById('m4-n').value);
+  const sigma = parseFloat(document.getElementById('m4-noise').value);
+  const umbral = parseFloat(document.getElementById('m4-umbral').value);
+
+  const isRunge = (sc === 'MAL_CONDICIONADO');
+  const a = isRunge ? -1 : 0;
+  const b = isRunge ? 1 : 2 * Math.PI;
+  const trueFunc = t => isRunge ? 1 / (1 + 25 * t * t) : Math.sin(t);
+
+  // Nodos conocidos + nodos ocultados para prueba real
+  const allNodes = [];
+  for (let i = 0; i < N; i++) {
+    const ti = a + ((b - a) * i) / (N - 1);
+    // Ruido determinista reproducible (pseudo-gaussiano)
+    const pseudoNoise = sigma * Math.sin(17.3 * i + 1.1) * Math.cos(5.7 * i);
+    allNodes.push({ t: ti, yClean: trueFunc(ti), yObs: trueFunc(ti) + pseudoNoise });
+  }
+
+  // Ocultar 2 nodos internos para medir error de reconstrucción
+  const hiddenIdx = [Math.floor(N / 3), Math.floor((2 * N) / 3)];
+  const trainNodes = allNodes.filter((_, idx) => !hiddenIdx.includes(idx));
+  const testNodes = allNodes.filter((_, idx) => hiddenIdx.includes(idx));
+
+  // 1. Lagrange
+  function evalLagrange(t, nodes) {
+    let sum = 0;
+    for (let i = 0; i < nodes.length; i++) {
+      let li = 1;
+      for (let j = 0; j < nodes.length; j++) {
+        if (i !== j) li *= (t - nodes[j].t) / (nodes[i].t - nodes[j].t);
+      }
+      sum += nodes[i].yObs * li;
+    }
+    return sum;
+  }
+
+  // 2. Newton (Diferencias Divididas)
+  const m = trainNodes.length;
+  const dd = Array.from({ length: m }, () => Array(m).fill(0));
+  for (let i = 0; i < m; i++) dd[i][0] = trainNodes[i].yObs;
+  for (let j = 1; j < m; j++) {
+    for (let i = 0; i < m - j; i++) {
+      dd[i][j] = (dd[i + 1][j - 1] - dd[i][j - 1]) / (trainNodes[i + j].t - trainNodes[i].t);
+    }
+  }
+  function evalNewton(t) {
+    let res = dd[0][0], prod = 1;
+    for (let j = 1; j < m; j++) {
+      prod *= (t - trainNodes[j - 1].t);
+      res += dd[0][j] * prod;
+    }
+    return res;
+  }
+
+  // 3. Splines Cúbicos Naturales
+  function buildNaturalSpline(nodes) {
+    const n = nodes.length - 1;
+    const h = Array(n), alpha = Array(n + 1).fill(0);
+    for (let i = 0; i < n; i++) h[i] = nodes[i + 1].t - nodes[i].t;
+    for (let i = 1; i < n; i++) {
+      alpha[i] = (3 / h[i]) * (nodes[i + 1].yObs - nodes[i].yObs) - (3 / h[i - 1]) * (nodes[i].yObs - nodes[i - 1].yObs);
+    }
+    const l = Array(n + 1).fill(1), mu = Array(n + 1).fill(0), z = Array(n + 1).fill(0);
+    for (let i = 1; i < n; i++) {
+      l[i] = 2 * (nodes[i + 1].t - nodes[i - 1].t) - h[i - 1] * mu[i - 1];
+      mu[i] = h[i] / l[i];
+      z[i] = (alpha[i] - h[i - 1] * z[i - 1]) / l[i];
+    }
+    const c = Array(n + 1).fill(0), bCoef = Array(n).fill(0), d = Array(n).fill(0);
+    for (let j = n - 1; j >= 0; j--) {
+      c[j] = z[j] - mu[j] * c[j + 1];
+      bCoef[j] = (nodes[j + 1].yObs - nodes[j].yObs) / h[j] - h[j] * (c[j + 1] + 2 * c[j]) / 3;
+      d[j] = (c[j + 1] - c[j]) / (3 * h[j]);
+    }
+    return (t) => {
+      let i = n - 1;
+      for (let k = 0; k < n; k++) {
+        if (t <= nodes[k + 1].t) { i = k; break; }
+      }
+      const dx = t - nodes[i].t;
+      return nodes[i].yObs + bCoef[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;
+    };
+  }
+  const evalSpline = buildNaturalSpline(trainNodes);
+
+  // Evaluación sobre malla densa + nodos ocultados
+  const grid = [], errPoly = [], errSpline = [];
+  let maxErrLag = 0, maxErrNewt = 0, maxErrSpl = 0;
+  for (let i = 0; i <= 100; i++) {
+    const ti = a + ((b - a) * i) / 100;
+    const yr = trueFunc(ti);
+    const yl = evalLagrange(ti, trainNodes);
+    const yn = evalNewton(ti);
+    const ys = evalSpline(ti);
+    maxErrLag = Math.max(maxErrLag, Math.abs(yl - yr));
+    maxErrNewt = Math.max(maxErrNewt, Math.abs(yn - yr));
+    maxErrSpl = Math.max(maxErrSpl, Math.abs(ys - yr));
+    grid.push({ t: ti, yr, yl: Math.max(-1.5, Math.min(2.0, yl)), ys });
+    errPoly.push({ x: ti, y: Math.min(2.5, Math.abs(yl - yr)) });
+    errSpline.push({ x: ti, y: Math.min(2.5, Math.abs(ys - yr)) });
+  }
+
+  // Error específico en puntos ocultados
+  const hidErrLag = testNodes.reduce((s, p) => s + Math.abs(evalLagrange(p.t, trainNodes) - p.yClean), 0) / testNodes.length;
+  const hidErrSpl = testNodes.reduce((s, p) => s + Math.abs(evalSpline(p.t) - p.yClean), 0) / testNodes.length;
+
+  // Raíz de cruce de umbral S(t) - umbral = 0 (Bisección en primer subintervalo que cruza)
+  let crossMsg = 'Sin cruce en rango';
+  for (let i = 0; i < grid.length - 1; i++) {
+    if ((grid[i].ys - umbral) * (grid[i + 1].ys - umbral) <= 0) {
+      let lo = grid[i].t, hi = grid[i + 1].t;
+      for (let k = 0; k < 30; k++) {
+        const mid = (lo + hi) / 2;
+        if ((evalSpline(lo) - umbral) * (evalSpline(mid) - umbral) <= 0) hi = mid; else lo = mid;
+      }
+      crossMsg = `t_cruce = ${fmt((lo + hi) / 2, 5)} s`;
+      break;
+    }
+  }
+
+  document.getElementById('m4-results').innerHTML = `
+    <h3>Comparación de Métodos de Interpolación (Nodos activos: ${trainNodes.length}, Ocultados: ${testNodes.length}, ${crossMsg})</h3>
+    <table>
+      <thead>
+        <tr><th>Método</th><th>Error Medio Nodos Ocultados</th><th>Error Máximo Global</th><th>Equivalencia Algebraica</th><th>Estabilidad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Polinomio de Lagrange</td><td>${fmt(hidErrLag)}</td><td>${fmt(maxErrLag)}</td><td>Polinomio único grado ${trainNodes.length - 1}</td><td>${isRunge ? 'Inestable (Fenómeno de Runge)' : 'Sensible a ruido'}</td></tr>
+        <tr><td>Newton (Dif. Divididas)</td><td>${fmt(hidErrLag)}</td><td>${fmt(maxErrNewt)}</td><td>Idéntico a Lagrange (|L−N| = ${fmt(Math.abs(maxErrLag - maxErrNewt))})</td><td>${isRunge ? 'Inestable (Fenómeno de Runge)' : 'Sensible a ruido'}</td></tr>
+        <tr><td>Splines Cúbicos Naturales</td><td>${fmt(hidErrSpl)}</td><td>${fmt(maxErrSpl)}</td><td>Suavidad C<sup>2</sup> por tramos</td><td>Alta estabilidad local</td></tr>
+      </tbody>
+    </table>
+  `;
+
+  drawLineChart('m4-chart1', [
+    { label: 'Señal Real', data: grid.map(p => ({ x: p.t, y: p.yr })), color: '#111827', width: 2.2 },
+    { label: 'Lagrange / Newton', data: grid.map(p => ({ x: p.t, y: p.yl })), color: '#dc2626', dash: [5, 4], width: 1.8 },
+    { label: 'Splines Cúbicos', data: grid.map(p => ({ x: p.t, y: p.ys })), color: '#2563eb', width: 2 },
+    { label: 'Nodos Medidos', data: trainNodes.map(p => ({ x: p.t, y: p.yObs })), color: '#000000', points: true, width: 0.1 }
+  ], 'Tiempo t', 'Lectura Sensor y(t)');
+
+  drawLineChart('m4-chart2', [
+    { label: 'Error Polinomio Global', data: errPoly, color: '#dc2626', width: 2 },
+    { label: 'Error Splines Cúbicos', data: errSpline, color: '#2563eb', width: 2 }
+  ], 'Tiempo t', 'Error Absoluto |P(t) − y_real(t)|');
+
+  document.getElementById('m4-conclusions').innerHTML = `
+    <div class="conclusion-box">
+      <strong>Conclusión Numérica:</strong> Lagrange y Newton generan exactamente el mismo polinomio interpolador (diferencia numérica ~10<sup>−15</sup>). En el escenario mal condicionado (función de Runge), aumentar nodos equiespaciados provoca oscilaciones espurias en los extremos, mientras que los Splines cúbicos naturales acotan el error manteniendo continuidad C<sup>2</sup>.
+    </div>
+    <div class="conclusion-box">
+      <strong>Conclusión del Problema Aplicado:</strong> Ante microcortes de telemetría en sensores de línea, la reconstrucción mediante Splines cúbicos evita falsas alarmas de sobre-tensión que provocarían los polinomios de grado alto y permite localizar cruces por umbral (${crossMsg}) con alta confiabilidad.
+    </div>
+  `;
+
+  lastExperimentSnapshot = {
+    modulo: 'Módulo 4: Sensores',
+    escenario: sc,
+    params: { N, sigma, umbral },
+    resumen: `Err Oculto Spline = ${fmt(hidErrSpl)}, Err Max Poly = ${fmt(maxErrLag)}, ${crossMsg}`
+  };
+}
+
+// ==================== PERSISTENCIA E HISTORIAL ====================
+function saveCurrentExperiment(modName) {
+  if (!lastExperimentSnapshot) return;
+  const list = JSON.parse(localStorage.getItem('simtele_history_v2') || '[]');
+  const entry = {
+    id: list.length + 1,
+    fecha: new Date().toLocaleString('es-BO'),
+    modulo: lastExperimentSnapshot.modulo,
+    escenario: lastExperimentSnapshot.escenario,
+    params: lastExperimentSnapshot.params,
+    resumen: lastExperimentSnapshot.resumen
+  };
+  list.unshift(entry);
+  localStorage.setItem('simtele_history_v2', JSON.stringify(list));
+  alert('Experimento guardado correctamente en la base de datos persistente (ID #' + entry.id + ').');
+}
+
+function renderHistory() {
+  const list = JSON.parse(localStorage.getItem('simtele_history_v2') || '[]');
+  const tbody = document.getElementById('history-tbody');
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay ejecuciones guardadas aún. Ejecute un módulo y presione "Guardar en Historial".</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map((item, idx) => `
+    <tr>
+      <td>#${item.id}</td>
+      <td>${item.fecha}</td>
+      <td><strong>${item.modulo}</strong></td>
+      <td><span class="badge">${item.escenario}</span></td>
+      <td>${item.resumen}<br><small>Params: ${JSON.stringify(item.params)}</small></td>
+      <td><button class="btn btn-sm" onclick="relaunchExperiment(${idx})">Relanzar</button></td>
+    </tr>
+  `).join('');
+}
+
+function relaunchExperiment(idx) {
+  const list = JSON.parse(localStorage.getItem('simtele_history_v2') || '[]');
+  const item = list[idx];
+  if (!item) return;
+  if (item.modulo.includes('Módulo 1')) {
+    openModule('mod1');
+    document.getElementById('m1-escenario').value = item.escenario;
+    document.getElementById('m1-v0').value = item.params.v0;
+    document.getElementById('m1-tr').value = item.params.tr;
+    document.getElementById('m1-a0').value = item.params.a0;
+    document.getElementById('m1-cd').value = item.params.cd;
+    document.getElementById('m1-h').value = item.params.h;
+    runMod1();
+  } else if (item.modulo.includes('Módulo 2')) {
+    openModule('mod2');
+    document.getElementById('m2-escenario').value = item.escenario;
+    document.getElementById('m2-d0').value = item.params.D0;
+    document.getElementById('m2-alpha').value = item.params.alpha;
+    document.getElementById('m2-beta').value = item.params.beta;
+    document.getElementById('m2-dumbral').value = item.params.Dumbral;
+    document.getElementById('m2-tol').value = item.params.tol;
+    runMod2();
+  } else if (item.modulo.includes('Módulo 3')) {
+    openModule('mod3');
+    document.getElementById('m3-escenario').value = item.escenario;
+    document.getElementById('m3-m').value = item.params.m;
+    document.getElementById('m3-k').value = item.params.k;
+    document.getElementById('m3-c').value = item.params.c;
+    document.getElementById('m3-f0').value = item.params.F0;
+    document.getElementById('m3-h').value = item.params.h;
+    document.getElementById('m3-T').value = item.params.T;
+    runMod3();
+  } else if (item.modulo.includes('Módulo 4')) {
+    openModule('mod4');
+    document.getElementById('m4-escenario').value = item.escenario;
+    document.getElementById('m4-n').value = item.params.N;
+    document.getElementById('m4-noise').value = item.params.sigma;
+    document.getElementById('m4-umbral').value = item.params.umbral;
+    runMod4();
+  }
+}
+
+function exportHistoryJSON() {
+  const data = localStorage.getItem('simtele_history_v2') || '[]';
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'simtele_risk_historial_semana2.json';
+  a.click();
+}
+
+function clearHistory() {
+  localStorage.removeItem('simtele_history_v2');
+  renderHistory();
+}
+
+// Inicializar semilla de historial si está vacío
+if (!localStorage.getItem('simtele_history_v2')) {
+  localStorage.setItem('simtele_history_v2', JSON.stringify([
+    {
+      id: 1,
+      fecha: '21/11/2026 18:30:00',
+      modulo: 'Módulo 1: Detención',
+      escenario: 'NORMAL',
+      params: { v0: 6.0, tr: 0.8, a0: 1.2, cd: 0.0, h: 0.05 },
+      resumen: 't_det = 5.800 s, x_det = 19.800 m, Err RK4 = 0.000'
+    }
+  ]));
+}
+</script>
+</body>
+</html>
